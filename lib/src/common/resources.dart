@@ -14,13 +14,13 @@ class HostedmodelsResource extends Resource {
    *
    * [optParams] - Additional query parameters
    */
-  Future<Output> predict(Input request, String hostedModelName, {Map optParams}) {
-    var completer = new Completer();
+  async.Future<Output> predict(Input request, core.String hostedModelName, {core.Map optParams}) {
+    var completer = new async.Completer();
     var url = "hostedmodels/{hostedModelName}/predict";
-    var urlParams = new Map();
-    var queryParams = new Map();
+    var urlParams = new core.Map();
+    var queryParams = new core.Map();
 
-    var paramErrors = new List();
+    var paramErrors = new core.List();
     if (hostedModelName == null) paramErrors.add("hostedModelName is required");
     if (hostedModelName != null) urlParams["hostedModelName"] = hostedModelName;
     if (optParams != null) {
@@ -57,13 +57,13 @@ class TrainingResource extends Resource {
    *
    * [optParams] - Additional query parameters
    */
-  Future<Map> delete(String data, {Map optParams}) {
-    var completer = new Completer();
+  async.Future<core.Map> delete(core.String data, {core.Map optParams}) {
+    var completer = new async.Completer();
     var url = "training/{data}";
-    var urlParams = new Map();
-    var queryParams = new Map();
+    var urlParams = new core.Map();
+    var queryParams = new core.Map();
 
-    var paramErrors = new List();
+    var paramErrors = new core.List();
     if (data == null) paramErrors.add("data is required");
     if (data != null) urlParams["data"] = data;
     if (optParams != null) {
@@ -94,13 +94,13 @@ class TrainingResource extends Resource {
    *
    * [optParams] - Additional query parameters
    */
-  Future<Training> get(String data, {Map optParams}) {
-    var completer = new Completer();
+  async.Future<Training> get(core.String data, {core.Map optParams}) {
+    var completer = new async.Completer();
     var url = "training/{data}";
-    var urlParams = new Map();
-    var queryParams = new Map();
+    var urlParams = new core.Map();
+    var queryParams = new core.Map();
 
-    var paramErrors = new List();
+    var paramErrors = new core.List();
     if (data == null) paramErrors.add("data is required");
     if (data != null) urlParams["data"] = data;
     if (optParams != null) {
@@ -131,13 +131,13 @@ class TrainingResource extends Resource {
    *
    * [optParams] - Additional query parameters
    */
-  Future<Training> insert(Training request, {Map optParams}) {
-    var completer = new Completer();
+  async.Future<Training> insert(Training request, {core.Map optParams}) {
+    var completer = new async.Completer();
     var url = "training";
-    var urlParams = new Map();
-    var queryParams = new Map();
+    var urlParams = new core.Map();
+    var queryParams = new core.Map();
 
-    var paramErrors = new List();
+    var paramErrors = new core.List();
     if (optParams != null) {
       optParams.forEach((key, value) {
         if (value != null && queryParams[key] == null) {
@@ -168,13 +168,13 @@ class TrainingResource extends Resource {
    *
    * [optParams] - Additional query parameters
    */
-  Future<Output> predict(Input request, String data, {Map optParams}) {
-    var completer = new Completer();
+  async.Future<Output> predict(Input request, core.String data, {core.Map optParams}) {
+    var completer = new async.Completer();
     var url = "training/{data}/predict";
-    var urlParams = new Map();
-    var queryParams = new Map();
+    var urlParams = new core.Map();
+    var queryParams = new core.Map();
 
-    var paramErrors = new List();
+    var paramErrors = new core.List();
     if (data == null) paramErrors.add("data is required");
     if (data != null) urlParams["data"] = data;
     if (optParams != null) {
@@ -207,13 +207,13 @@ class TrainingResource extends Resource {
    *
    * [optParams] - Additional query parameters
    */
-  Future<Training> update(Update request, String data, {Map optParams}) {
-    var completer = new Completer();
+  async.Future<Training> update(Update request, core.String data, {core.Map optParams}) {
+    var completer = new async.Completer();
     var url = "training/{data}";
-    var urlParams = new Map();
-    var queryParams = new Map();
+    var urlParams = new core.Map();
+    var queryParams = new core.Map();
 
-    var paramErrors = new List();
+    var paramErrors = new core.List();
     if (data == null) paramErrors.add("data is required");
     if (data != null) urlParams["data"] = data;
     if (optParams != null) {
