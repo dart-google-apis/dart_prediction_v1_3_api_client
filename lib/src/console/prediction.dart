@@ -72,7 +72,7 @@ class Prediction extends ConsoleClient {
 
   Prediction([oauth2.OAuth2Console auth]) : super(auth) {
     basePath = "/prediction/v1.3/";
-    rootUrl = "https://www.googleapis.com:443/";
+    rootUrl = "https://www.googleapis.com/";
     _hostedmodels = new HostedmodelsResource_(this);
     _training = new TrainingResource_(this);
   }
