@@ -291,10 +291,18 @@ class TrainingModelInfo {
       modelType = json["modelType"];
     }
     if (json.containsKey("numberClasses")) {
-      numberClasses = json["numberClasses"];
+      if(json["numberClasses"] is core.String){
+        numberClasses = core.int.parse(json["numberClasses"]);
+      }else{
+        numberClasses = json["numberClasses"];
+      }
     }
     if (json.containsKey("numberInstances")) {
-      numberInstances = json["numberInstances"];
+      if(json["numberInstances"] is core.String){
+        numberInstances = core.int.parse(json["numberInstances"]);
+      }else{
+        numberInstances = json["numberInstances"];
+      }
     }
   }
 
