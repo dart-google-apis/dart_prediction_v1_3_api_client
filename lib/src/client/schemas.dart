@@ -1,4 +1,4 @@
-part of prediction_v1_3_api_client;
+part of prediction_v1_3_api;
 
 class Input {
 
@@ -31,14 +31,23 @@ class Input {
 /** Input to the model for a prediction */
 class InputInput {
 
+  /** A list of input features, these can be strings or doubles. */
+  core.List<core.Object> csvInstance;
+
   /** Create new InputInput from JSON data */
   InputInput.fromJson(core.Map json) {
+    if (json.containsKey("csvInstance")) {
+      csvInstance = json["csvInstance"].toList();
+    }
   }
 
   /** Create JSON Object for InputInput */
   core.Map toJson() {
     var output = new core.Map();
 
+    if (csvInstance != null) {
+      output["csvInstance"] = csvInstance.toList();
+    }
 
     return output;
   }
@@ -80,10 +89,7 @@ class Output {
       outputLabel = json["outputLabel"];
     }
     if (json.containsKey("outputMulti")) {
-      outputMulti = [];
-      json["outputMulti"].forEach((item) {
-        outputMulti.add(new OutputOutputMulti.fromJson(item));
-      });
+      outputMulti = json["outputMulti"].map((outputMultiItem) => new OutputOutputMulti.fromJson(outputMultiItem)).toList();
     }
     if (json.containsKey("outputValue")) {
       outputValue = json["outputValue"];
@@ -107,10 +113,7 @@ class Output {
       output["outputLabel"] = outputLabel;
     }
     if (outputMulti != null) {
-      output["outputMulti"] = new core.List();
-      outputMulti.forEach((item) {
-        output["outputMulti"].add(item.toJson());
-      });
+      output["outputMulti"] = outputMulti.map((outputMultiItem) => outputMultiItem.toJson()).toList();
     }
     if (outputValue != null) {
       output["outputValue"] = outputValue;
@@ -182,7 +185,7 @@ class Training {
   core.String trainingStatus;
 
   /** A class weighting function, which allows the importance weights for classes to be specified [Categorical models only]. */
-  core.List<TrainingUtility> utility;
+  core.List<core.Map<core.String, core.num>> utility;
 
   /** Create new Training from JSON data */
   Training.fromJson(core.Map json) {
@@ -202,10 +205,7 @@ class Training {
       trainingStatus = json["trainingStatus"];
     }
     if (json.containsKey("utility")) {
-      utility = [];
-      json["utility"].forEach((item) {
-        utility.add(new TrainingUtility.fromJson(item));
-      });
+      utility = json["utility"].map((utilityItem) => _mapMap(utilityItem)).toList();
     }
   }
 
@@ -229,10 +229,7 @@ class Training {
       output["trainingStatus"] = trainingStatus;
     }
     if (utility != null) {
-      output["utility"] = new core.List();
-      utility.forEach((item) {
-        output["utility"].add(item.toJson());
-      });
+      output["utility"] = utility.map((utilityItem) => _mapMap(utilityItem)).toList();
     }
 
     return output;
@@ -253,10 +250,10 @@ class TrainingModelInfo {
   core.num classificationAccuracy;
 
   /** An output confusion matrix. This shows an estimate for how this model will do in predictions. This is first indexed by the true class label. For each true class label, this provides a pair {predicted_label, count}, where count is the estimated number of times the model will predict the predicted label given the true label. Will not output if more then 100 classes [Categorical models only]. */
-  TrainingModelInfoConfusionMatrix confusionMatrix;
+  core.Map<core.String, core.Map<core.String, core.num>> confusionMatrix;
 
   /** A list of the confusion matrix row totals */
-  TrainingModelInfoConfusionMatrixRowTotals confusionMatrixRowTotals;
+  core.Map<core.String, core.num> confusionMatrixRowTotals;
 
   /** An estimated mean squared error. The can be used to measure the quality of the predicted model [Regression models only]. */
   core.num meanSquaredError;
@@ -279,10 +276,10 @@ class TrainingModelInfo {
       classificationAccuracy = json["classificationAccuracy"];
     }
     if (json.containsKey("confusionMatrix")) {
-      confusionMatrix = new TrainingModelInfoConfusionMatrix.fromJson(json["confusionMatrix"]);
+      confusionMatrix = _mapMap(json["confusionMatrix"], (confusionMatrixItem) => _mapMap(confusionMatrixItem));
     }
     if (json.containsKey("confusionMatrixRowTotals")) {
-      confusionMatrixRowTotals = new TrainingModelInfoConfusionMatrixRowTotals.fromJson(json["confusionMatrixRowTotals"]);
+      confusionMatrixRowTotals = _mapMap(json["confusionMatrixRowTotals"]);
     }
     if (json.containsKey("meanSquaredError")) {
       meanSquaredError = json["meanSquaredError"];
@@ -291,18 +288,10 @@ class TrainingModelInfo {
       modelType = json["modelType"];
     }
     if (json.containsKey("numberClasses")) {
-      if(json["numberClasses"] is core.String){
-        numberClasses = core.int.parse(json["numberClasses"]);
-      }else{
-        numberClasses = json["numberClasses"];
-      }
+      numberClasses = (json["numberClasses"] is core.String) ? core.int.parse(json["numberClasses"]) : json["numberClasses"];
     }
     if (json.containsKey("numberInstances")) {
-      if(json["numberInstances"] is core.String){
-        numberInstances = core.int.parse(json["numberInstances"]);
-      }else{
-        numberInstances = json["numberInstances"];
-      }
+      numberInstances = (json["numberInstances"] is core.String) ? core.int.parse(json["numberInstances"]) : json["numberInstances"];
     }
   }
 
@@ -317,10 +306,10 @@ class TrainingModelInfo {
       output["classificationAccuracy"] = classificationAccuracy;
     }
     if (confusionMatrix != null) {
-      output["confusionMatrix"] = confusionMatrix.toJson();
+      output["confusionMatrix"] = _mapMap(confusionMatrix, (confusionMatrixItem) => _mapMap(confusionMatrixItem));
     }
     if (confusionMatrixRowTotals != null) {
-      output["confusionMatrixRowTotals"] = confusionMatrixRowTotals.toJson();
+      output["confusionMatrixRowTotals"] = _mapMap(confusionMatrixRowTotals);
     }
     if (meanSquaredError != null) {
       output["meanSquaredError"] = meanSquaredError;
@@ -343,75 +332,21 @@ class TrainingModelInfo {
 
 }
 
-/** An output confusion matrix. This shows an estimate for how this model will do in predictions. This is first indexed by the true class label. For each true class label, this provides a pair {predicted_label, count}, where count is the estimated number of times the model will predict the predicted label given the true label. Will not output if more then 100 classes [Categorical models only]. */
-class TrainingModelInfoConfusionMatrix {
-
-  /** Create new TrainingModelInfoConfusionMatrix from JSON data */
-  TrainingModelInfoConfusionMatrix.fromJson(core.Map json) {
-  }
-
-  /** Create JSON Object for TrainingModelInfoConfusionMatrix */
-  core.Map toJson() {
-    var output = new core.Map();
-
-
-    return output;
-  }
-
-  /** Return String representation of TrainingModelInfoConfusionMatrix */
-  core.String toString() => JSON.stringify(this.toJson());
-
-}
-
-/** A list of the confusion matrix row totals */
-class TrainingModelInfoConfusionMatrixRowTotals {
-
-  /** Create new TrainingModelInfoConfusionMatrixRowTotals from JSON data */
-  TrainingModelInfoConfusionMatrixRowTotals.fromJson(core.Map json) {
-  }
-
-  /** Create JSON Object for TrainingModelInfoConfusionMatrixRowTotals */
-  core.Map toJson() {
-    var output = new core.Map();
-
-
-    return output;
-  }
-
-  /** Return String representation of TrainingModelInfoConfusionMatrixRowTotals */
-  core.String toString() => JSON.stringify(this.toJson());
-
-}
-
-/** Class label (string). */
-class TrainingUtility {
-
-  /** Create new TrainingUtility from JSON data */
-  TrainingUtility.fromJson(core.Map json) {
-  }
-
-  /** Create JSON Object for TrainingUtility */
-  core.Map toJson() {
-    var output = new core.Map();
-
-
-    return output;
-  }
-
-  /** Return String representation of TrainingUtility */
-  core.String toString() => JSON.stringify(this.toJson());
-
-}
-
 class Update {
 
   /** The true class label of this instance */
   core.String classLabel;
 
+  /** The input features for this instance */
+  core.List<core.Object> csvInstance;
+
   /** Create new Update from JSON data */
   Update.fromJson(core.Map json) {
     if (json.containsKey("classLabel")) {
       classLabel = json["classLabel"];
+    }
+    if (json.containsKey("csvInstance")) {
+      csvInstance = json["csvInstance"].toList();
     }
   }
 
@@ -422,6 +357,9 @@ class Update {
     if (classLabel != null) {
       output["classLabel"] = classLabel;
     }
+    if (csvInstance != null) {
+      output["csvInstance"] = csvInstance.toList();
+    }
 
     return output;
   }
@@ -431,3 +369,16 @@ class Update {
 
 }
 
+core.Map _mapMap(core.Map source, [core.Object convert(core.Object source) = null]) {
+  assert(source != null);
+  var result = new dart_collection.LinkedHashMap();
+  source.forEach((core.String key, value) {
+    assert(key != null);
+    if(convert == null) {
+      result[key] = value;
+    } else {
+      result[key] = convert(value);
+    }
+  });
+  return result;
+}
